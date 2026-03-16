@@ -1,0 +1,25 @@
+# Pierwsza linia do 50 znaków, tryb rozkazujący, bez kropki na końcu
+# feat: Dodaj funkcjonalność do kodu
+# fix: Napraw błąd w kodzie
+# chore: Zrób rzeczy wymagane, nieprzyjemne
+# test: Zmień funkcje testów jednostkowych
+
+# Druga linijka pusta
+# W ciele linijki do 70 znaków, pierwsze zdanie w trybie rozkazującym
+# z kropką na końcu. Jedna rzecz zrobiona na jeden akapit, akapity
+# rozdzielane pustymi linijkami.
+# Commity powinny być stosunkowo małe, żeby zmianę można było
+# odkręcić bez rozwiązywania dużej ilości problemów jednym revertem;
+# Jeżeli masz kilka takich zmian w toku wykonywania zadania wszystkie
+# złącz w merge request, nie w grubym commicie.
+# Jeżeli to naprawa błędu, tutaj znajdzie się opis techniczny tego
+# błędu, kroki podjęte żeby go odkręcić, etc.
+# Jeżeli to testy jednostkowe, tutaj znajdzie się opis tego, co jest
+# pokryte, jeżeli naprawa testów jednostkowych, tutaj będzie opis
+# tego, co zostało naprawione.
+# Jeżeli to rzecz wymagana, nieprzyjemna, tutaj będzie dokładny opis
+# tego, co jest w zmianie dodane, dotknięte, etc.
+
+# Linijka przed stopką pusta
+# Stopki w formacie czytelnym dla maszyn
+# Related-to: URL do taska, do którego jest to powiązane
