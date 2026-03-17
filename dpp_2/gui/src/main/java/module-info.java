@@ -11,8 +11,10 @@ module pl.pwr.gui {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
 
+    //for sql
+    requires java.sql;
+    requires org.xerial.sqlitejdbc;
 
-
-    opens pl.pwr.gui to javafx.fxml;
-    exports pl.pwr.gui;
+    opens pl.pwr.controller to javafx.fxml;
+    exports pl.pwr.controller;
 }

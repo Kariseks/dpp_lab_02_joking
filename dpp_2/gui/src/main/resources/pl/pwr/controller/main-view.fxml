@@ -47,6 +47,11 @@
                   <fx:include fx:id="wyswietlTab" source="wyswietl-view.fxml" />
               </content>
           </Tab>
+            <Tab text="Dodaj">
+                <content>
+                    <fx:include fx:id="dodajTab" source="dodaj-view.fxml" />
+                </content>
+            </Tab>
             <Tab text="Historia">
                 <content>
                     <fx:include fx:id="historiaTab" source="historia-view.fxml" />

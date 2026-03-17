@@ -1,4 +1,4 @@
-package pl.pwr.gui;
+package pl.pwr.controller;
 
 import javafx.application.Application;
 
