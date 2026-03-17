@@ -9,8 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="337.0" prefWidth="474.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="337.0" prefWidth="474.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.pwr.controller.DodajController">
    <children>
       <VBox alignment="TOP_CENTER" layoutX="265.0" layoutY="78.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -19,14 +18,14 @@
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <TextArea prefHeight="200.0" prefWidth="200.0" />
-            <MenuButton alignment="CENTER" mnemonicParsing="false" text="Wybierz Tagi">
+            <TextArea id="jokeTxtAddTxtArea" prefHeight="200.0" prefWidth="200.0" />
+            <MenuButton id="addTagAddMenuBtn" alignment="CENTER" mnemonicParsing="false" text="Wybierz Tagi">
               <items>
                 <MenuItem mnemonicParsing="false" text="Action 1" />
                 <MenuItem mnemonicParsing="false" text="Action 2" />
               </items>
             </MenuButton>
-            <Button mnemonicParsing="false" text="Dodaj" />
+            <Button id="addJokeAddBtn" mnemonicParsing="false" text="Dodaj" />
          </children>
       </VBox>
    </children>

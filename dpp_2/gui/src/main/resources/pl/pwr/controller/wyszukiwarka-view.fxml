@@ -15,8 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.pwr.controller.WyszukiwarkaController">
     <children>
         <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <padding>
@@ -29,10 +28,10 @@
                             <children>
                                 <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0">
                                     <children>
-                                        <ComboBox prefWidth="150.0" />
-                                        <ComboBox prefWidth="150.0" />
-                                        <ComboBox prefWidth="150.0" />
-                                        <MenuButton mnemonicParsing="false" text="MenuButton">
+                                        <ComboBox id="dateSrchComBox" prefWidth="150.0" />
+                                        <ComboBox id="raitingSrchComboBox" prefWidth="150.0" />
+                                        <ComboBox id="userSrchComBox" prefWidth="150.0" />
+                                        <MenuButton id="tagSrchComBox" mnemonicParsing="false" text="MenuButton">
                                             <items>
                                                 <MenuItem mnemonicParsing="false" text="Action 1" />
                                                 <MenuItem mnemonicParsing="false" text="Action 2" />
@@ -40,7 +39,7 @@
                                                 <CheckMenuItem mnemonicParsing="false" text="Unspecified Action" />
                                             </items>
                                         </MenuButton>
-                                        <Button mnemonicParsing="false" text="Resetuj" />
+                                        <Button id="resetSrchBtn" mnemonicParsing="false" text="Resetuj" />
                                     </children>
                                 </HBox>
                                 <HBox prefHeight="100.0" prefWidth="200.0">
@@ -50,19 +49,25 @@
                                                 <Font size="16.0" />
                                             </font>
                                         </Label>
-                                        <TextField maxWidth="500.0" />
-                                        <Button maxWidth="250.0" mnemonicParsing="false" text="Button" />
+                                        <TextField id="titleSrchTxtField" maxWidth="500.0" />
+                                        <Button id="SearchSrchBtn" maxWidth="250.0" mnemonicParsing="false" text="Szukaj" />
                                     </children>
                                 </HBox>
                             </children>
                         </VBox>
                     </children>
                 </HBox>
-                <TableView maxHeight="2000.0" maxWidth="2000.0" prefHeight="0.0" prefWidth="0.0" VBox.vgrow="ALWAYS">
+                <TableView id="SrchTableView" maxHeight="2000.0" maxWidth="2000.0" prefHeight="0.0" prefWidth="0.0" VBox.vgrow="ALWAYS">
                     <columns>
-                        <TableColumn prefWidth="75.0" text="C1" />
-                        <TableColumn prefWidth="75.0" text="C2" />
+                        <TableColumn id="titleSrchCol" prefWidth="75.0" text="Tytuł" />
+                        <TableColumn id="raitingSrchCol" prefWidth="75.0" text="Ocena" />
+                  <TableColumn id="authorSrchCol" prefWidth="75.0" text="Author" />
+                  <TableColumn id="dateSrchCol" prefWidth="75.0" text="Data" />
+                  <TableColumn id="tagSrchCol" prefWidth="75.0" text="Tagi" />
                     </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
                 </TableView>
             </children>
         </VBox>

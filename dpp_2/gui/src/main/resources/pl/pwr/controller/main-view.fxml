@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.pwr.controller.main">
    <top>
       <VBox alignment="CENTER" prefHeight="0.0" prefWidth="0.0" BorderPane.alignment="CENTER">
          <children>
@@ -37,27 +37,27 @@
    <center>
       <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
-          <Tab text="Wyszukiwarka">
+          <Tab id="wyszukiwarkaTab" text="Wyszukiwarka">
               <content>
                   <fx:include fx:id="wyszukiwarkaTab" source="wyszukiwarka-view.fxml" />
               </content>
           </Tab>
-          <Tab closable="false" text="Wyświetl">
+          <Tab id="wyswietlTab" closable="false" text="Wyświetl">
               <content>
                   <fx:include fx:id="wyswietlTab" source="wyswietl-view.fxml" />
               </content>
           </Tab>
-            <Tab text="Dodaj">
+            <Tab id="dodajTab" text="Dodaj">
                 <content>
                     <fx:include fx:id="dodajTab" source="dodaj-view.fxml" />
                 </content>
             </Tab>
-            <Tab text="Historia">
+            <Tab id="historiaTab" text="Historia">
                 <content>
                     <fx:include fx:id="historiaTab" source="historia-view.fxml" />
                 </content>
             </Tab>
-            <Tab text="Statystyki">
+            <Tab id="StatystykiTab" text="Statystyki">
                 <content>
                     <fx:include fx:id="statystykiTab" source="statystyki-view.fxml" />
                 </content>
