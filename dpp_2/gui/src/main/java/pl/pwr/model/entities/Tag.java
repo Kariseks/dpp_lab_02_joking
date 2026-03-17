@@ -1,4 +1,6 @@
 package pl.pwr.model.entities;
 
-public class Tag {
-}
+public record Tag(
+        int id,
+        String name
+) {}

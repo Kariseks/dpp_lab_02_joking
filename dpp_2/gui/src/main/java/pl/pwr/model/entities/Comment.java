@@ -1,4 +1,9 @@
 package pl.pwr.model.entities;
 
-public class Comment {
-}
+public record Comment(
+        int id,
+        String text,
+        int rating,
+        int jokeId,
+        int userId
+) {}
