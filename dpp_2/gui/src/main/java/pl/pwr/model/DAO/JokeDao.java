@@ -9,30 +9,54 @@ import java.util.List;
 
 public class JokeDao {
 
-    public List<Joke> findJokes(String tagFilter, String titleSearch, String sortBy) {
+    public enum Sort {
+        date_up,
+        date_down,
+        rate_up,
+        rate_down;
+    }
+
+    public List<Joke> findJokes(ArrayList<String> tagFilter, String titleSearch, String sortBy) {
         List<Joke> jokes = new ArrayList<>();
 
-        // Podstawowe zapytanie z GROUP_CONCAT, żeby zwinąć tagi do jednego pola
+        // 1. Główne zapytanie z poprawionym aliasem (u.username AS author)
         StringBuilder sql = new StringBuilder("""
-            SELECT j.id, j.title, j.content, j.creationDate, j.status, u.username, 
-                   GROUP_CONCAT(t.name, ', ') as tag_list,
-                   (SELECT AVG(rating) FROM comments WHERE joke_id = j.id) as avg_rating
-            FROM jokes j
-            JOIN users u ON j.user_id = u.id
-            LEFT JOIN joke_tags jt ON j.id = jt.joke_id
-            LEFT JOIN tags t ON jt.tag_id = t.id
-            WHERE 1=1
-        """);
+        SELECT j.id, j.title, j.content, j.creationDate, j.status, u.username AS author, 
+               GROUP_CONCAT(t.name, ', ') AS tag_list,
+               (SELECT AVG(rating) FROM comments WHERE joke_id = j.id) AS avg_rating
+        FROM jokes j
+        JOIN users u ON j.user_id = u.id
+        LEFT JOIN joke_tags jt ON j.id = jt.joke_id
+        LEFT JOIN tags t ON jt.tag_id = t.id
+        WHERE 1=1
+    """);
 
-        // Dynamiczne filtry
-        if (titleSearch != null && !titleSearch.isEmpty()) sql.append(" AND j.title LIKE ? ");
-        if (tagFilter != null && !tagFilter.isEmpty()) {
-            sql.append(" AND j.id IN (SELECT joke_id FROM joke_tags jt2 JOIN tags t2 ON jt2.tag_id = t2.id WHERE t2.name = ?) ");
+        // 2. Filtrowanie po tytule
+        if (titleSearch != null && !titleSearch.isEmpty()) {
+            sql.append(" AND j.title LIKE ? ");
         }
 
+        // 3. Prawdziwe filtrowanie po wielu tagach (Relational Division)
+        if (tagFilter != null && !tagFilter.isEmpty()) {
+            sql.append(" AND j.id IN ( ");
+            sql.append("   SELECT jt2.joke_id FROM joke_tags jt2 ");
+            sql.append("   JOIN tags t2 ON jt2.tag_id = t2.id ");
+            sql.append("   WHERE t2.name IN (");
+
+            // Dynamiczne generowanie znaków zapytania: ?,?,?
+            sql.append("?,".repeat(tagFilter.size()).replaceAll(",$", ""));
+
+            sql.append(") ");
+            sql.append("   GROUP BY jt2.joke_id ");
+            // Wymagamy, aby liczba dopasowanych tagów była równa liczbie tagów w filtrze
+            sql.append("   HAVING COUNT(DISTINCT t2.name) = ? ");
+            sql.append(" ) ");
+        }
+
+        // Grupowanie niezbędne dla GROUP_CONCAT
         sql.append(" GROUP BY j.id ");
 
-        // Sortowanie
+        // 4. Sortowanie
         if (sortBy != null) {
             switch (sortBy) {
                 case "DATE" -> sql.append(" ORDER BY j.creationDate DESC ");
@@ -42,26 +66,45 @@ public class JokeDao {
             }
         }
 
+        // 5. Egzekucja
         try (Connection conn = DBConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
 
             int paramIdx = 1;
-            if (titleSearch != null && !titleSearch.isEmpty()) pstmt.setString(paramIdx++, "%" + titleSearch + "%");
-            if (tagFilter != null && !tagFilter.isEmpty()) pstmt.setString(paramIdx++, tagFilter);
 
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                jokes.add(new Joke(
-                        rs.getInt("id"),
-                        rs.getString("title"),
-                        rs.getString("content"),
-                        rs.getString("author"),
-                        rs.getString("tag_list"),
-                        rs.getString("creationDate"),
-                        rs.getInt("status")
-                ));
+            // Podstawienie parametru dla tytułu
+            if (titleSearch != null && !titleSearch.isEmpty()) {
+                pstmt.setString(paramIdx++, "%" + titleSearch + "%");
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+
+            // Podstawienie parametrów dla tagów
+            if (tagFilter != null && !tagFilter.isEmpty()) {
+                // Najpierw wstawiamy nazwy wszystkich tagów pod wygenerowane pytajniki IN (?,?,?)
+                for (String tag : tagFilter) {
+                    pstmt.setString(paramIdx++, tag);
+                }
+                // Na koniec wstawiamy oczekiwaną liczbę dopasowań dla HAVING COUNT(...) = ?
+                pstmt.setInt(paramIdx++, tagFilter.size());
+            }
+
+            // Zamknięcie ResultSet w try-with-resources zapobiega wyciekom pamięci
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    jokes.add(new Joke(
+                            rs.getInt("id"),
+                            rs.getString("title"),
+                            rs.getString("content"),
+                            rs.getString("author"),
+                            rs.getString("tag_list"),
+                            rs.getString("creationDate"),
+                            rs.getInt("status")
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         return jokes;
     }
 
@@ -99,7 +142,7 @@ public class JokeDao {
         } catch (SQLException e) { e.printStackTrace(); }
     }
 
-    // 3. ZMIANA STATUSU (np. Akceptacja/Ukrycie)
+    // 3. ZMIANA STATUSU żartu
     public void updateStatus(int jokeId, int newStatus) {
         String sql = "UPDATE jokes SET status = ? WHERE id = ?";
         try (Connection conn = DBConnector.getConnection();
