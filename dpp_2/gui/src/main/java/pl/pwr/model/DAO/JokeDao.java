@@ -16,12 +16,12 @@ public class JokeDao {
         rate_down;
     }
 
-    public List<Joke> findJokes(ArrayList<String> tagFilter, String titleSearch, String sortBy) {
+    //todo done by gemini
+    public List<Joke> findJokes(List<String> tagFilter, String titleSearch, String authorUsername, Integer maxDaysOld) {
         List<Joke> jokes = new ArrayList<>();
 
-        // 1. Główne zapytanie z poprawionym aliasem (u.username AS author)
         StringBuilder sql = new StringBuilder("""
-        SELECT j.id, j.title, j.content, j.creationDate, j.status, u.username AS author, 
+        SELECT j.id, j.title, j.content, j.creationDate, j.status, u.username AS author,
                GROUP_CONCAT(t.name, ', ') AS tag_list,
                (SELECT AVG(rating) FROM comments WHERE joke_id = j.id) AS avg_rating
         FROM jokes j
@@ -31,63 +31,57 @@ public class JokeDao {
         WHERE 1=1
     """);
 
-        // 2. Filtrowanie po tytule
-        if (titleSearch != null && !titleSearch.isEmpty()) {
+        // 1. Filtr: Tytuł
+        if (titleSearch != null && !titleSearch.isBlank()) {
             sql.append(" AND j.title LIKE ? ");
         }
 
-        // 3. Prawdziwe filtrowanie po wielu tagach (Relational Division)
+        // 2. Filtr: Nazwa użytkownika (dokładne dopasowanie)
+        if (authorUsername != null && !authorUsername.isBlank()) {
+            sql.append(" AND u.username = ? ");
+        }
+
+        // 3. Filtr: Wiek żartu (SQLite date logic)
+        if (maxDaysOld != null && maxDaysOld > 0) {
+            sql.append(" AND j.creationDate >= date('now', '-' || ? || ' days') ");
+        }
+
+        // 4. Filtr: Tagi (Relational Division)
         if (tagFilter != null && !tagFilter.isEmpty()) {
             sql.append(" AND j.id IN ( ");
             sql.append("   SELECT jt2.joke_id FROM joke_tags jt2 ");
             sql.append("   JOIN tags t2 ON jt2.tag_id = t2.id ");
             sql.append("   WHERE t2.name IN (");
-
-            // Dynamiczne generowanie znaków zapytania: ?,?,?
             sql.append("?,".repeat(tagFilter.size()).replaceAll(",$", ""));
-
-            sql.append(") ");
-            sql.append("   GROUP BY jt2.joke_id ");
-            // Wymagamy, aby liczba dopasowanych tagów była równa liczbie tagów w filtrze
-            sql.append("   HAVING COUNT(DISTINCT t2.name) = ? ");
-            sql.append(" ) ");
+            sql.append(") GROUP BY jt2.joke_id HAVING COUNT(DISTINCT t2.name) = ? ) ");
         }
 
-        // Grupowanie niezbędne dla GROUP_CONCAT
-        sql.append(" GROUP BY j.id ");
+        sql.append(" GROUP BY j.id ORDER BY j.creationDate DESC ");
 
-        // 4. Sortowanie
-        if (sortBy != null) {
-            switch (sortBy) {
-                case "DATE" -> sql.append(" ORDER BY j.creationDate DESC ");
-                case "RATING" -> sql.append(" ORDER BY avg_rating DESC ");
-                case "USER" -> sql.append(" ORDER BY u.username ASC ");
-                default -> sql.append(" ORDER BY j.id DESC ");
-            }
-        }
-
-        // 5. Egzekucja
         try (Connection conn = DBConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
 
             int paramIdx = 1;
 
-            // Podstawienie parametru dla tytułu
-            if (titleSearch != null && !titleSearch.isEmpty()) {
+            if (titleSearch != null && !titleSearch.isBlank()) {
                 pstmt.setString(paramIdx++, "%" + titleSearch + "%");
             }
 
-            // Podstawienie parametrów dla tagów
+            if (authorUsername != null && !authorUsername.isBlank()) {
+                pstmt.setString(paramIdx++, authorUsername);
+            }
+
+            if (maxDaysOld != null && maxDaysOld > 0) {
+                pstmt.setInt(paramIdx++, maxDaysOld);
+            }
+
             if (tagFilter != null && !tagFilter.isEmpty()) {
-                // Najpierw wstawiamy nazwy wszystkich tagów pod wygenerowane pytajniki IN (?,?,?)
                 for (String tag : tagFilter) {
                     pstmt.setString(paramIdx++, tag);
                 }
-                // Na koniec wstawiamy oczekiwaną liczbę dopasowań dla HAVING COUNT(...) = ?
                 pstmt.setInt(paramIdx++, tagFilter.size());
             }
 
-            // Zamknięcie ResultSet w try-with-resources zapobiega wyciekom pamięci
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     jokes.add(new Joke(
@@ -97,14 +91,14 @@ public class JokeDao {
                             rs.getString("author"),
                             rs.getString("tag_list"),
                             rs.getString("creationDate"),
-                            rs.getInt("status")
+                            rs.getInt("status"),
+                            rs.getDouble("avg_rating")
                     ));
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return jokes;
     }
 

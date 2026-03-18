@@ -8,6 +8,8 @@ package pl.pwr.model.entities;
 -- 4 zawiesozny
 */
 
+import java.util.ArrayList;
+
 public record Joke(
         int id,
         String title,

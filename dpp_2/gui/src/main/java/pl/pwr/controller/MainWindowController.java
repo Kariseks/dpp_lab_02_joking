@@ -3,6 +3,10 @@ package pl.pwr.controller;
 import javafx.scene.control.Tab;
 import javafx.fxml.FXML;
 import javafx.scene.control.TabPane;
+import pl.pwr.model.entities.Joke;
+
+import java.util.List;
+
 public class MainWindowController {
 
     public Tab adminTab;
@@ -21,7 +25,7 @@ public class MainWindowController {
     @FXML private Tab statisticTab;
 
 
-
+    private Joke selectedJoke;
     //------------------------------------------------------------------------------------------------------------------
     private int userId;
     private String username;
@@ -70,6 +74,10 @@ public class MainWindowController {
     public void switchTab(TabE tabN) {
         mainTabPane.getSelectionModel().select(tabN.ordinal());
     }
+    public void chooseJoke(List<Joke> jList, Joke currJ) {
+        selectedJoke = currJ;
+        displayTabContentController.displayJokes(jList, currJ);
+        switchTab(TabE.DISPLAY);
+    }
 
-    //handling login
 }

@@ -5,6 +5,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
+import pl.pwr.model.entities.Joke;
+
+import java.util.List;
 
 public class DisplayTabController {
     public ListView jokesDispTabListView;
@@ -31,5 +34,10 @@ public class DisplayTabController {
     }
 
     public void action_resetDispTabBtn(ActionEvent actionEvent) {
+    }
+
+
+    public void displayJokes(List<Joke> jokeList, Joke currJ){
+
     }
 }
