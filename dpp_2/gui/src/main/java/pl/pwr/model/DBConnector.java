@@ -1,8 +1,8 @@
 package pl.pwr.model;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.sql.*;
 
 public class DBConnector {
@@ -16,42 +16,43 @@ public class DBConnector {
     public static void setupDatabase() {
         File file = new File(DB_FILE);
         if (!file.exists()) {
-            System.out.println("Baza nie istnieje. Tworze nową bazę z danymi testowymi");
+            System.out.println("Baza nie istnieje. Tworzę nową bazę z danymi testowymi...");
             try (Connection conn = getConnection()) {
-                createTables(conn);
-                seedData(conn);
+                // Ścieżki od katalogu 'resources'
+                executeSqlScript(conn, "pl/pwr/model/DBCreator.sql");
+                executeSqlScript(conn, "pl/pwr/model/seeder.sql");
             } catch (SQLException e) {
-                e.printStackTrace();
+                System.err.println("Błąd inicjalizacji bazy: " + e.getMessage());
             }
         }
     }
 
-    private static void createTables(Connection conn) throws SQLException {
-        executeSqlScript(conn, "src/main/resources/pl/pwr/model/DBCreator.sql");
-    }
+    private static void executeSqlScript(Connection conn, String resourcePath) {
+        // getResourceAsStream szuka plików wewnątrz skompilowanych zasobów (target/classes)
+        try (InputStream is = DBConnector.class.getResourceAsStream("/" + resourcePath)) {
 
-    private static void seedData(Connection conn) throws SQLException {
-        executeSqlScript(conn,  "src/main/resources/pl/pwr/model/DBSeedData.sql");
-    }
+            if (is == null) {
+                System.err.println("Nie znaleziono pliku zasobów: " + resourcePath);
+                return;
+            }
 
-
-    private static void executeSqlScript(Connection conn, String fileName) {
-        try {
-
-            String script = Files.readString(Path.of("src/main/resources/" + fileName));
-
-            String[] queries = script.split(";");   //to exectue each query separate
+            // Czytamy cały strumień do Stringa
+            String script = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+            String[] queries = script.split(";");
 
             try (Statement stmt = conn.createStatement()) {
                 for (String query : queries) {
-                    if (!query.trim().isEmpty()) {
-                        stmt.execute(query);
+                    String trimmedQuery = query.trim();
+                    if (!trimmedQuery.isEmpty()) {
+                        stmt.execute(trimmedQuery);
                     }
                 }
             }
-            System.out.println("Skrypt SQL wykonany pomyślnie.");
+            System.out.println("Skrypt [" + resourcePath + "] wykonany pomyślnie.");
+
         } catch (Exception e) {
-            System.err.println("Błąd wczytywania pliku SQL: " + e.getMessage());
+            System.err.println("Błąd podczas wykonywania skryptu " + resourcePath + ": " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }
