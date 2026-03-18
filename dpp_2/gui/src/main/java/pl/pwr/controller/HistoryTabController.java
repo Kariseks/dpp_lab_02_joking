@@ -1,4 +1,4 @@
 package pl.pwr.controller;
 
-public class HistoryController {
+public class HistoryTabController {
 }
