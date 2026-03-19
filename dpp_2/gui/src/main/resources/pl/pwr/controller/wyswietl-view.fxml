@@ -14,8 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.pwr.controller.DisplayTabController">
     <children>
         <SplitPane dividerPositions="0.29797979797979796" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <items>
@@ -28,7 +27,7 @@
                                         <Font name="System Bold" size="18.0" />
                                     </font>
                                 </Label>
-                                <ListView prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                                <ListView id="jokeListDispListView" fx:id="jokesDispTabListView" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                             </children>
                             <padding>
                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -62,10 +61,10 @@
                                                 </VBox>
                                                 <VBox prefHeight="200.0" prefWidth="100.0">
                                                     <children>
-                                                        <Label text="lbl_seed_author" />
-                                                        <Label text="lbl_seed_note" />
-                                                        <Label text="lbl_seed_date" />
-                                                        <Label text="lbl_seed_tags" />
+                                                        <Label id="authorDispLbl" fx:id="authorDispTabLbl" text="lbl_seed_author" />
+                                                        <Label id="noteDispLbl" fx:id="ratitingDispTabLbl" text="lbl_seed_note" />
+                                                        <Label id="dateDispLbl" fx:id="dateDispTabLbl" text="lbl_seed_date" />
+                                                        <Label id="tagsDispLbl" fx:id="tagsDispTabLbl" text="lbl_seed_tags" />
                                                     </children>
                                                 </VBox>
                                             </children>
@@ -82,9 +81,9 @@
                                                 </VBox>
                                                 <VBox prefHeight="200.0" prefWidth="100.0">
                                                     <children>
-                                                        <Label text="lbl_seed_count_display" />
-                                                        <Label text="lbl_seed_count_comments" />
-                                                        <Label text="lbl_seed_status" />
+                                                        <Label id="dipsCountDispLbl" fx:id="dispCountDispTabLbl" text="lbl_seed_count_display" />
+                                                        <Label id="commentCountDispLbl" fx:id="commentsCountDispTabLbl" text="lbl_seed_count_comments" />
+                                                        <Label id="stateDispLbl" fx:id="stateDispTabLbl" text="lbl_seed_status" />
                                                     </children>
                                                 </VBox>
                                             </children>
@@ -95,14 +94,14 @@
                                     <items>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                                             <children>
-                                                <TextArea layoutX="68.0" layoutY="-60.0" prefHeight="200.0" prefWidth="200.0" text="joke_text" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                <TextArea id="jokeTxtDispTxtArea" fx:id="jokeTxtDispTabLbl" editable="false" layoutX="68.0" layoutY="-60.0" prefHeight="200.0" prefWidth="200.0" text="joke_text" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                             </children>
                                         </AnchorPane>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                                             <children>
                                                 <SplitPane dividerPositions="0.29797979797979796" layoutX="208.0" layoutY="55.0" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                     <items>
-                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="352.0">
                                                             <children>
                                                                 <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                                     <children>
@@ -113,20 +112,20 @@
                                                                         </Label>
                                                                         <HBox prefHeight="0.0" prefWidth="0.0">
                                                                             <children>
-                                                                                <ComboBox prefWidth="150.0" />
-                                                                                <ComboBox prefWidth="150.0" />
-                                                                                <ComboBox prefWidth="150.0" />
-                                                                                <Button maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Resetuj" />
+                                                                                <ComboBox id="dateDispComBox" fx:id="dateDispTabComBOx" prefWidth="150.0" promptText="data" />
+                                                                                <ComboBox id="ratingDispComBox" fx:id="raitingDispTabComBox" prefWidth="150.0" promptText="ocena" />
+                                                                                <ComboBox id="sortCommentaryDispComBox" fx:id="sortDispTabComBox" prefWidth="150.0" promptText="sort" />
+                                                                                <Button id="resetCommentFilterDispComBox" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#action_resetDispTabBtn" text="Resetuj" />
                                                                             </children>
                                                                         </HBox>
-                                                                        <ListView prefHeight="200.0" prefWidth="200.0" />
+                                                                        <ListView id="commentListDispListView" fx:id="commentsDispTabListView" prefHeight="200.0" prefWidth="239.0" />
                                                                     </children>
                                                                 </VBox>
                                                             </children>
                                                         </AnchorPane>
                                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                                             <children>
-                                                                <TextArea layoutX="28.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" text="comment_text" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                                <TextArea id="commentTxtDispTxtArea" fx:id="commentDispTabTxtArea" editable="false" layoutX="28.0" layoutY="14.0" prefHeight="200.0" prefWidth="480.0" text="comment_text" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                                             </children>
                                                         </AnchorPane>
                                                     </items>
@@ -137,9 +136,8 @@
                                 </SplitPane>
                                 <ButtonBar prefHeight="40.0" prefWidth="200.0">
                                     <buttons>
-                                        <Button mnemonicParsing="false" text="Zgłoś" />
-                                        <Button mnemonicParsing="false" text="Dodaj komentarz" />
-                                        <Button mnemonicParsing="false" text="Usuń" />
+                                        <Button id="reportDispBtn" mnemonicParsing="false" onAction="#action_reportJokeDispTabBtn" text="Zgłoś" />
+                                        <Button id="addCommentDispBtn" mnemonicParsing="false" onAction="#action_addCommentDispTabBtn" text="Dodaj komentarz" />
                                     </buttons>
                                 </ButtonBar>
                             </children>

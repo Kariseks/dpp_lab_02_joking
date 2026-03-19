@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.pwr.controller.MainWindowController">
    <top>
       <VBox alignment="CENTER" prefHeight="0.0" prefWidth="0.0" BorderPane.alignment="CENTER">
          <children>
@@ -35,31 +35,36 @@
       </VBox>
    </top>
    <center>
-      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+      <TabPane fx:id="mainTabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
-          <Tab text="Wyszukiwarka">
+          <Tab id="searchTab" fx:id="searchTab" text="Wyszukiwarka">
               <content>
-                  <fx:include fx:id="wyszukiwarkaTab" source="wyszukiwarka-view.fxml" />
+                  <fx:include fx:id="searchTabContent" source="wyszukiwarka-view.fxml" />
               </content>
           </Tab>
-          <Tab closable="false" text="Wyświetl">
+          <Tab id="displayTab" fx:id="displayTab" closable="false" text="Wyświetl">
               <content>
-                  <fx:include fx:id="wyswietlTab" source="wyswietl-view.fxml" />
+                  <fx:include fx:id="displayTabContent" source="wyswietl-view.fxml" />
               </content>
           </Tab>
-            <Tab text="Dodaj">
+            <Tab id="addJokeTab" fx:id="addJokeTab" text="Dodaj">
                 <content>
-                    <fx:include fx:id="dodajTab" source="dodaj-view.fxml" />
+                    <fx:include fx:id="addJokeTabContent" source="dodaj-view.fxml" />
                 </content>
             </Tab>
-            <Tab text="Historia">
+            <Tab id="historyTab" fx:id="historyTab" text="Historia">
                 <content>
-                    <fx:include fx:id="historiaTab" source="historia-view.fxml" />
+                    <fx:include fx:id="historyTabContent" source="historia-view.fxml" />
                 </content>
             </Tab>
-            <Tab text="Statystyki">
+            <Tab id="statisticTab" fx:id="statisticTab" text="Statystyki">
                 <content>
-                    <fx:include fx:id="statystykiTab" source="statystyki-view.fxml" />
+                    <fx:include fx:id="statisticTabContent" source="statystyki-view.fxml" />
+                </content>
+            </Tab>
+            <Tab id="adminTab" fx:id="adminTab" text="Admin" >
+                <content>
+                    <fx:include fx:id="adminTabContent" source="adminTab-view.fxml" />
                 </content>
             </Tab>
 

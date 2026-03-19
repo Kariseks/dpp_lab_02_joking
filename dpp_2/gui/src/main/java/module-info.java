@@ -14,6 +14,7 @@ module pl.pwr.gui {
     //for sql
     requires java.sql;
     requires org.xerial.sqlitejdbc;
+    requires java.desktop;
 
     opens pl.pwr.controller to javafx.fxml;
     exports pl.pwr.controller;

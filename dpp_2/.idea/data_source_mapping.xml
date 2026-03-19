@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourcePerFileMappings">
+    <file url="file://$PROJECT_DIR$/gui/src/main/java/pl/pwr/model/DAO/JokeDao.java" value="e4d64510-9d4d-4bda-a415-d95213f0714c" />
+    <file url="file://$PROJECT_DIR$/gui/src/main/resources/pl/pwr/model/DBCreator.sql" value="e4d64510-9d4d-4bda-a415-d95213f0714c" />
+    <file url="file://$PROJECT_DIR$/gui/src/main/resources/pl/pwr/model/seeder.sql" value="e4d64510-9d4d-4bda-a415-d95213f0714c" />
+  </component>
+</project>
